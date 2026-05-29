@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-class FashionApp(ctk.CTk):
+class Food(ctk.CTk):
     # --- Color Palette Hex Codes as Class Constants ---
     COLOR_HEADER_BLUE = "#1d5b96"
     COLOR_TEXT_BROWN = "#8a3324"
@@ -14,7 +14,7 @@ class FashionApp(ctk.CTk):
         super().__init__()
         
         # Initialize the main window configurations
-        self.title("Fashion: Then VS Now")
+        self.title("Food: Then VS Now")
         self.geometry("1000x750")
         
         # Set the theme and main window background color
@@ -65,23 +65,23 @@ class FashionApp(ctk.CTk):
         parent_frame.grid_columnconfigure(0, weight=1)
         
         # 3 uniform grid rows keep everything completely matched across the split screen
-        parent_frame.grid_rowconfigure(0, weight=1, uniform="clothing_row") 
-        parent_frame.grid_rowconfigure(1, weight=1, uniform="accessories_row") 
-        parent_frame.grid_rowconfigure(2, weight=1, uniform="footwear_row") 
+        parent_frame.grid_rowconfigure(0, weight=1, uniform="Maindish_row") 
+        parent_frame.grid_rowconfigure(1, weight=1, uniform="snacks_row") 
+
 
         # ---------------------------------------------------------
-        # 1. CLOTHING BLOCK
+        # 1. Main dish BLOCK
         # ---------------------------------------------------------
-        clothing_card = ctk.CTkFrame(parent_frame, fg_color=self.COLOR_CARD_BG, corner_radius=12, border_width=1, border_color="#eff6ff")
-        clothing_card.grid(row=0, column=0, sticky="nsew", pady=(0, 25))
+        dish_card = ctk.CTkFrame(parent_frame, fg_color=self.COLOR_CARD_BG, corner_radius=12, border_width=1, border_color="#eff6ff")
+        dish_card.grid(row=0, column=0, sticky="nsew", pady=(0, 25))
         
         ctk.CTkLabel(
-            clothing_card, 
-            text=c_title if c_title is not None else "Clothing Label [Null]", 
+            dish_card, 
+            text=c_title if c_title is not None else "Main Dish [Null]", 
             font=("Arial", 16, "bold"), text_color=self.COLOR_HEADER_BLUE
         ).pack(anchor="w", padx=15, pady=(15, 10))
 
-        c_split_box = ctk.CTkFrame(clothing_card, fg_color="transparent")
+        c_split_box = ctk.CTkFrame(dish_card, fg_color="transparent")
         c_split_box.pack(fill="x", padx=15, pady=(0, 10))
 
         if c_img is None:
@@ -92,25 +92,25 @@ class FashionApp(ctk.CTk):
 
         ctk.CTkLabel(
             c_split_box, 
-            text=c_desc1 if c_desc1 is not None else "Clothing overview details are currently unpopulated in database rows.",
+            text=c_desc1 if c_desc1 is not None else "Main dish overview details are currently unpopulated in database rows.",
             font=("Arial", 12, "bold"), text_color=self.COLOR_TEXT_DARK_BROWN, wraplength=260, justify="left"
         ).pack(side="left", fill="both", expand=True, anchor="n")
 
         ctk.CTkLabel(
-            clothing_card, 
+            dish_card, 
             text=c_desc2 if c_desc2 is not None else "Extended design description block missing from the database record [Null].",
             font=("Arial", 12, "bold"), text_color=self.COLOR_TEXT_DARK_BROWN, wraplength=410, justify="left"
         ).pack(fill="both", expand=True, padx=15, pady=(10, 15))
 
         # ---------------------------------------------------------
-        # 2. ACCESSORIES BLOCK
+        # 2. SNACKS BLOCK
         # ---------------------------------------------------------
         acc_card = ctk.CTkFrame(parent_frame, fg_color=self.COLOR_CARD_BG, corner_radius=12, border_width=1, border_color="#eff6ff")
         acc_card.grid(row=1, column=0, sticky="nsew", pady=(0, 25))
         
         ctk.CTkLabel(
             acc_card, 
-            text=a_title if a_title is not None else "Accessories [Null]", 
+            text=a_title if a_title is not None else "Snacks [Null]", 
             font=("Arial", 16, "bold"), text_color=self.COLOR_HEADER_BLUE
         ).pack(pady=(15, 10))
 
@@ -125,36 +125,10 @@ class FashionApp(ctk.CTk):
 
         ctk.CTkLabel(
             a_split_box, 
-            text=a_desc if a_desc is not None else "Accessory usage summary text is unpopulated inside the database [Null].",
+            text=a_desc if a_desc is not None else "Snack usage summary text is unpopulated inside the database [Null].",
             font=("Arial", 12, "bold"), text_color=self.COLOR_TEXT_DARK_BROWN, wraplength=280, justify="left"
         ).pack(side="left", fill="both", expand=True, anchor="n")
 
-        # ---------------------------------------------------------
-        # 3. FOOTWEAR BLOCK
-        # ---------------------------------------------------------
-        foot_card = ctk.CTkFrame(parent_frame, fg_color=self.COLOR_CARD_BG, corner_radius=12, border_width=1, border_color="#eff6ff")
-        foot_card.grid(row=2, column=0, sticky="nsew", pady=(0, 15))
-        
-        ctk.CTkLabel(
-            foot_card, 
-            text=f_title if f_title is not None else "Footwear [Null]", 
-            font=("Arial", 16, "bold"), text_color=self.COLOR_HEADER_BLUE
-        ).pack(pady=(15, 10))
-
-        f_split_box = ctk.CTkFrame(foot_card, fg_color="transparent")
-        f_split_box.pack(fill="both", expand=True, padx=15, pady=(0, 15))
-
-        if f_img is None:
-            foot_img_placeholder = ctk.CTkFrame(f_split_box, width=110, height=160, fg_color=self.COLOR_PLACEHOLDER_BG, corner_radius=8)
-            foot_img_placeholder.pack(side="left", padx=(0, 15))
-            foot_img_placeholder.pack_propagate(False)
-            ctk.CTkLabel(foot_img_placeholder, text="No Image\n[Null]", text_color=self.COLOR_PLACEHOLDER_TEXT, font=("Arial", 11, "bold")).pack(expand=True)
-
-        ctk.CTkLabel(
-            f_split_box, 
-            text=f_desc if f_desc is not None else "Footwear styling trends and history details are missing from database fields [Null].",
-            font=("Arial", 12, "bold"), text_color=self.COLOR_TEXT_DARK_BROWN, wraplength=280, justify="left"
-        ).pack(side="left", fill="both", expand=True, anchor="n")
 
     def create_widgets(self):
         """Generates layout layout, main containers, and triggers column builds."""
@@ -259,5 +233,5 @@ class FashionApp(ctk.CTk):
 
 # --- Application Entry Point ---
 if __name__ == "__main__":
-    app = FashionApp()
+    app = Food()
     app.mainloop()

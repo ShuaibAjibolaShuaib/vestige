@@ -4,7 +4,6 @@ from customtkinter import *
 from pages.auth.welcome import WelcomePage
 from pages.auth.login import LoginPage
 from pages.auth.signup import SignupPage
-from pages.home import HomePage
 
 
 class App:

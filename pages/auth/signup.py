@@ -1,8 +1,9 @@
 import customtkinter as ctk
 from PIL import Image
 
-from pages.auth.login import LoginPage
+from pages.dashboard import Dashboard
 from pages.home import HomePage
+from pages.auth.login import LoginPage
 from ui.auth_layout import create_auth_layout
 from ui.theme import PRIMARY_BLUE, TEXT_WHITE
 from db.users_db import create_user, get_user_by_email

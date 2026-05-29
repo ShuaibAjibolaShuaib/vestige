@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from PIL import Image
 
+from pages.dashboard import Dashboard
 from pages.home import HomePage
 from ui.auth_layout import create_auth_layout
 from ui.theme import PRIMARY_BLUE, TEXT_WHITE
@@ -98,7 +99,7 @@ class LoginPage(ctk.CTkFrame):
             panel,
             text="Need and account? Sign Up",
             fg_color="transparent",
-            text_color=TEXT_WHITE,
+            text_color=PRIMARY_BLUE,
             hover=False,
             command=lambda: self.controller.show_page(SignupPage)
         ).place(relx=0.5, rely=0.85, anchor="center")
@@ -123,4 +124,4 @@ class LoginPage(ctk.CTkFrame):
                 text="Incorrect password", text_color="red")
             return
 
-        self.controller.show_page(HomePage)
+        self.controller.show_page(Dashboard)

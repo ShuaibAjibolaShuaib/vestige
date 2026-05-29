@@ -1,186 +1,177 @@
 import customtkinter as ctk
 from PIL import Image
 
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("dark-blue")
+from ui.theme import PRIMARY_BLUE, TEXT_WHITE
+from pages.timeline import TimelinePage
+from pages.tvn import TVNPage
+from ui.timeline_preview import create_timeline_preview
+
+# tvn cards function
 
 
-class HomePage(ctk.CTkFrame):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-        self.controller = controller
-
-        self.configure(fg_color="#F3F3F3")
-
-        title_label = ctk.CTkLabel(
-            self,
-            text="Welcome to the Home Page",
-            font=("Konkhmer Sleokchher", 24, "bold"),
-            text_color="black"
-        )
-
-        title_label.place(x=520, y=40)
-
-#for the scrolling frame
-my_frame = ctk.CTkScrollableFrame(self, 
-    orientation="vertical",                                        
-    width=795,                                        
-    height=256,                                         
-    label_text="Timeline Of Cultural Change",
-    fg_color="#E9E9E9",          
-    label_fg_color="#E9E9E9",
-    label_text_color="#6A6A6A",
-    corner_radius=12
-                                            
-)
-my_frame.place(x=285, y=560)
-
-button_texts = [
-    "Pre-Colonial Era\nTraditional Kingdoms, oral storytelling & indigenous languages.",
-
-    "Colonial Era\nWestern Education and new cultural influences",
-
-    "Independence\nNational Identity and cultural revival",
-
-    "Digital Age\nSmartphones, social media & globalisation",
-
-    "Future\nTechnology preserving culture"
-]
-
-for text in button_texts:
-    ctk.CTkButton(
-        my_frame,
-        text=text,
-        width=576,
-        height=121,
-        anchor="w",
-        fg_color="#3F6EA8",
-        hover_color="#355E8C",
-        text_color="white",
-        corner_radius=10,
-        font=("Arial", 18)
-    ).pack(pady=10)
-
-#for the button frame
-category_frame = ctk.CTkFrame(
-    self,
-    width=760,
-    height=320,
-    fg_color="#F3F3F3"
-)
-
-category_frame.place(x=320, y=180)
-
-
-fashion_image = ctk.CTkImage(
-    light_image=Image.open("images/fashion.jpg"),
-    size=(167, 141)
-)
-
-food_image = ctk.CTkImage(
-    light_image=Image.open("images/food.jpg"),
-    size=(167, 141)
-)
-
-comms_image = ctk.CTkImage(
-    light_image=Image.open("images/comms.jpg"),
-    size=(167, 141)
-)
-
-entertainment_image = ctk.CTkImage(
-    light_image=Image.open("images/entertainment.jpg"),
-    size=(167, 141)
-)
-
-fashion_icon = ctk.CTkImage(
-    light_image=Image.open("icons/bag.png"),
-    size=(90, 90)
-)
-
-food_icon = ctk.CTkImage(
-    light_image=Image.open("icons/burger.png"),
-    size=(90, 90)
-)
-
-comms_icon = ctk.CTkImage(
-    light_image=Image.open("icons/phone.png"),
-    size=(90, 90)
-)
-
-entertainment_icon = ctk.CTkImage(
-    light_image=Image.open("icons/tv.png"),
-    size=(90, 90)
-)
-
-cards = [
-    ("Fashion", fashion_image, fashion_icon),
-    
-    ("Food", food_image, food_icon),
-    
-    ("Comms", comms_image, comms_icon),
-    
-    ("Entertainment", entertainment_image, entertainment_icon)
-]
-
-
-
-row = 0
-column = 0
-
-for title, picture, icon in cards:
-
+def create_card(parent, title, image_path, icon_path, command=None):
     card = ctk.CTkFrame(
-        category_frame,
-        width=391,
-        height=189,
+        parent,
+        width=300,
+        height=170,
         corner_radius=20,
         fg_color="white",
-        border_width=1,
-        border_color="#D9D9D9"
     )
+    card.pack_propagate(False)
 
-    card.grid(row=row, column=column, padx=10, pady=10)
-
-    card.grid_propagate(False)
-
+    # image section
+    img = ctk.CTkImage(
+        Image.open(image_path),
+        size=(120, 100)
+    )
     image_label = ctk.CTkLabel(
         card,
-        image=picture,
+        image=img,
         text=""
     )
+    image_label.pack(side="left", padx=15, pady=15)
 
-    image_label.place(x=15, y=20)
-
-    title_label = ctk.CTkLabel(
-        card,
-        text=title,
-        font=("Konkhmer Sleokchher", 20, "bold"),
-        text_color="#707070"
+    # right section
+    right_side = ctk.CTkFrame(card, fg_color="transparent")
+    right_side.pack(
+        side="right",
+        fill="both",
+        expand=True,
+        padx=(0, 15),
+        pady=15
     )
 
-    title_label.place(x=150, y=15)
+    # title
+    title_label = ctk.CTkLabel(
+        right_side,
+        text=title,
+        font=("Konkhmer Sleokchher", 19, "bold"),
+        justify="center",
+        text_color="#333"
+    )
+    title_label.pack(anchor="w")
 
+    # icon
+    icon = ctk.CTkImage(
+        Image.open(icon_path),
+        size=(50, 50)
+    )
     icon_label = ctk.CTkLabel(
-        card,
+        right_side,
         image=icon,
         text=""
     )
+    icon_label.pack(anchor="w", pady=(10, 0))
 
-    icon_label.place(x=220, y=60)
-    
-    column += 1
+    if command:
+        widgets = [
+            card,
+            image_label,
+            right_side,
+            title_label,
+            icon_label
+        ]
+        for widget in widgets:
+            widget.bind("<Button-1>", lambda e: command())
 
-    if column > 1:
-        column = 0
-        row += 1
+    return card
 
 
-root = ctk.CTk()
+class HomePage(ctk.CTkFrame):
 
-root.title("Vestige")
-root.geometry("1440x896")
+    def __init__(self, parent, navigate):
+        super().__init__(parent)
 
-homepage = HomePage(root, None)
-homepage.pack(fill="both", expand=True)
+        # top section tvn cards
 
-root.mainloop()
+        top_section = ctk.CTkFrame(parent, fg_color="transparent")
+        top_section.pack(fill="x", padx=15, pady=(0, 20))
+
+        # bottom section timeline preview
+        bottom_section = ctk.CTkScrollableFrame(parent, fg_color="transparent")
+        bottom_section.pack(fill="both", expand=True, padx=15, pady=(0, 20))
+
+        title = ctk.CTkLabel(
+            top_section,
+            text="Then VS Now",
+            font=("Konkhmer Sleokchher", 23, "bold"),
+            text_color="#333"
+        )
+        title.pack(anchor="w", padx=15, pady=(20, 10))
+
+        card_grid = ctk.CTkFrame(top_section, fg_color="transparent")
+        card_grid.pack(fill="x")
+        card_grid.columnconfigure(0, weight=1)
+        card_grid.columnconfigure(1, weight=1)
+
+        card1 = create_card(
+            card_grid,
+            "Fashion",
+            "assets/pictures/23.jpeg",
+            "assets/icons/handbag.png",
+            command=lambda: navigate(TVNPage, navigate=navigate)
+        )
+        card1.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+        card2 = create_card(
+            card_grid,
+            "Food",
+            "assets/pictures/2.jpeg",
+            "assets/icons/hamburger.png",
+            command=lambda: navigate(TVNPage, navigate=navigate)
+        )
+        card2.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+        card3 = create_card(
+            card_grid,
+            "Communication",
+            "assets/pictures/33.jpeg",
+            "assets/icons/phone-call.png",
+            command=lambda: navigate(TVNPage, navigate=navigate)
+        )
+        card3.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+
+        card4 = create_card(
+            card_grid,
+            "Entertainment",
+            "assets/pictures/7.jpeg",
+            "assets/icons/tv.png",
+            command=lambda: navigate(TVNPage, navigate=navigate)
+        )
+        card4.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+
+        # timeline preview
+        create_timeline_preview(
+            bottom_section,
+            "Pre-colonial Era",
+            "Traditional Kingdoms, Oral Story Telling, Indigenous Languages",
+            command=lambda: navigate(TimelinePage, navigate=navigate)
+        )
+
+        create_timeline_preview(
+            bottom_section,
+            "Colonial Era",
+            "Western Education and Cultural Influences",
+            command=lambda: navigate(TimelinePage, navigate=navigate)
+        )
+
+        create_timeline_preview(
+            bottom_section,
+            "Independence",
+            "National Identity and Cultural Revival",
+            command=lambda: navigate(TimelinePage, navigate=navigate)
+        )
+
+        create_timeline_preview(
+            bottom_section,
+            "Digital Age",
+            "Smartphones, Social Media, Globalization",
+            command=lambda: navigate(TimelinePage, navigate=navigate)
+        )
+
+        create_timeline_preview(
+            bottom_section,
+            "Future Age",
+            "AI, Virtual Reality, Cultural Fusion",
+            command=lambda: navigate(TimelinePage, navigate=navigate)
+        )
