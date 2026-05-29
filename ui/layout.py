@@ -4,7 +4,14 @@ from PIL import Image
 
 # ---------------- LAYOUT FUNCTION ---------------- #
 
-def create_layout(app):
+def create_layout(
+    app,
+    home_command,
+    timeline_command,
+    tvn_command,
+    gallery_command=None,
+    ltr_command=None
+):
 
     # ---------------- LEFT SIDEBAR ---------------- #
 
@@ -21,7 +28,7 @@ def create_layout(app):
     # ---------------- LOGO ---------------- #
 
     app_icon = ctk.CTkImage(
-        Image.open("assets/icons/logo.PNG"),
+        Image.open("assets/icons/logo.png"),
         size=(20, 20)
     )
 
@@ -35,18 +42,18 @@ def create_layout(app):
 
     logo_label.pack(pady=(20, 10), padx=(5, 40))
 
-    app_icon = ctk.CTkImage(
+    app_icon2 = ctk.CTkImage(
         Image.open("assets/pictures/profile.PNG"),
-        size=(30, 30))
-    logo_label = ctk.CTkLabel(
+        size=(50, 50))
+    logo_label2 = ctk.CTkLabel(
         left_sidebar,
-        image=app_icon,
+        image=app_icon2,
         text="  Profile",
         compound="left",
         font=("Poppins", 15, "bold")
     )
 
-    logo_label.pack(pady=(0), padx=(0, 60))
+    logo_label2.pack(pady=(0), padx=(0, 60))
 
     top_left = ctk.CTkFrame(left_sidebar, fg_color="transparent")
     top_left.pack(fill="x", side="top")
@@ -56,10 +63,11 @@ def create_layout(app):
 
     # ---------------- NAV BUTTON FUNCTION ---------------- #
 
-    def nav_button(text, image_path, parent):
+    def nav_button(text, image_path, parent, command=None):
 
         icon = ctk.CTkImage(
-            Image.open(image_path),
+            light_image=Image.open(image_path),
+            dark_image=Image.open(image_path),
             size=(20, 20)
         )
 
@@ -67,10 +75,11 @@ def create_layout(app):
             parent,
             image=icon,
             text=text,
+            command=command,
             height=45,
             corner_radius=10,
             fg_color="transparent",
-            hover_color="#313244",
+            hover_color="#2A2C57",
             anchor="w"
         )
 
@@ -80,11 +89,15 @@ def create_layout(app):
 
     # ---------------- BUTTONS ---------------- #
 
-    nav_button("Home", "assets/icons/home.png", top_left)
-    nav_button("Then Vs Now", "assets/icons/tvn.png", top_left)
-    nav_button("Timelines", "assets/icons/time.png", top_left)
-    nav_button("Lost Traditions", "assets/icons/lost.png", top_left)
-    nav_button("Gallery", "assets/icons/gallery.png", top_left)
+    nav_button("Home", "assets/icons/home.png", top_left, command=home_command)
+    nav_button("Then Vs Now", "assets/icons/tvn.png",
+               top_left, command=tvn_command)
+    nav_button("Timelines", "assets/icons/time.png",
+               top_left, command=timeline_command)
+    nav_button("Lost Traditions", "assets/icons/lost.png",
+               top_left, command=ltr_command)
+    nav_button("Gallery", "assets/icons/gallery.png",
+               top_left, command=gallery_command)
     nav_button("About", "assets/icons/about.png", top_left)
     nav_button("Settings", "assets/icons/setting.png", bottom_left)
     nav_button("Log out", "assets/icons/logout.png", bottom_left)
@@ -102,23 +115,44 @@ def create_layout(app):
         expand=True
     )
 
-    # SAMPLE CONTENT
-    title = ctk.CTkLabel(
-        main_frame,
-        text="Main Content Area",
-        font=("Poppins", 35, "bold"),
+    # --- TOP BAR (QUOTE & SEARCH) ---
+    top_bar = ctk.CTkFrame(main_frame, fg_color="transparent")
+    top_bar.pack(fill="x", padx=25, pady=(20, 10))
+
+    quote = ctk.CTkLabel(
+        top_bar,
+        text="\"Exploring how the past shapes the present\nand what we risk losing...\"",
+        font=("Poppins", 13, "italic"),
+        text_color="#555555",
+        justify="left"
+    )
+    quote.pack(side="left", anchor="w")
+
+    search_bar = ctk.CTkEntry(
+        top_bar,
+        placeholder_text="Search",
+        width=220,
+        height=28,
+        corner_radius=14,
+        fg_color="#E0E0E0",
+        border_width=0,
         text_color="black"
     )
+    search_bar.pack(side="right", anchor="e", padx=10)
 
-    title.pack(pady=50)
+    # --- GREY CONTENT CONTAINER ---
+    container = ctk.CTkFrame(
+        main_frame, fg_color="#EBEBEB", corner_radius=20)
+    container.pack(fill="both", expand=True, padx=25, pady=(10, 20))
 
     # ---------------- RIGHT SIDEBAR ---------------- #
 
+    # Changed background color to match the deep blue style in the screenshot
     right_sidebar = ctk.CTkFrame(
         app,
-        width=300,
+        width=280,
         corner_radius=0,
-        fg_color="#525258"
+        fg_color="#2D5B94"
     )
 
     right_sidebar.pack_propagate(False)
@@ -128,40 +162,107 @@ def create_layout(app):
     top_right.pack(fill="x", side="top")
 
     bottom_right = ctk.CTkFrame(right_sidebar, fg_color="transparent")
-    bottom_right.pack(fill="x", side="bottom", pady=10)
+    bottom_right.pack(fill="x", side="bottom")
 
-    Third = ctk.CTkFrame(
+    # --- SECTION 1: DID YOU KNOW ---
+    dyk_title = ctk.CTkLabel(
         top_right,
-        width=240,
-        height=170,
-        corner_radius=10,
+        text="Did You Know...?",
+        font=("Konkhmer Sleokchher", 20, "bold"),
+        text_color="white"
+    )
+    dyk_title.pack(anchor="w", padx=15, pady=(15, 9))
+
+    third = ctk.CTkFrame(
+        top_right,
+        width=260,
+        height=270,
+        corner_radius=19,
         fg_color="#FFFFFF",
     )
+    third.pack_propagate(False)
+    third.pack(padx=15, pady=5)
 
-    Third.pack(fill="y", pady=(40, 40))
-    # SAMPLE CARDS
+    # image for the top frame
+
+    dyk_img_file = ctk.CTkImage(
+        Image.open("assets/pictures/5.jpeg"),
+        size=(200, 185)
+    )
+    dyk_img = ctk.CTkLabel(third, image=dyk_img_file, text="",)
+    dyk_img.pack(pady=(10, 5))
+
+    dyk_text = ctk.CTkLabel(
+        third,
+        text="☏ Before smartphones,\ncommunication relied on letters\nand messengers (Town Criers).",
+        font=("Konkhmer Sleokchher", 13, "bold"),
+        text_color="black"
+
+    )
+    dyk_text.pack(pady=5)
+
+    # what we're losing section
+    losing_title = ctk.CTkLabel(
+        top_right,
+        text="What We're Losing",
+        font=("Konkhmer Sleokchher", 20, "bold"),
+        text_color="white"
+    )
+    losing_title.pack(anchor="w", padx=15, pady=(10, 0))
+
+    # losing texts
+    losing_texts = [
+        "Many indigenous languages\nare disappearing",
+        "Traditional clothing is now\nmostly worn at events",
+        "The stories and customs that\nshaped us are slowly disappearing"
+    ]
+
     for i in range(3):
-
         card = ctk.CTkFrame(
             top_right,
-            width=240,
-            height=70,
-            corner_radius=10,
+            width=400,
+            height=90,
+            corner_radius=12,
             fg_color="white"
         )
+        card.pack_propagate(False)
+        card.pack(padx=15, pady=5)
 
-        card.pack(pady=8)
+        losing_lbl = ctk.CTkLabel(
+            card,
+            text=losing_texts[i],
+            font=("Konkhmer Sleokchher", 13, "bold"),
+            text_color="black",
+            justify="left",
+        )
+        losing_lbl.place(relx=0.45, rely=0.5, anchor="center")
+
+    # saved items section
+    saved_title = ctk.CTkLabel(
+        bottom_right,
+        text="Saved Items",
+        font=("Poppins", 20, "bold"),
+        text_color="white",
+    )
+    saved_title.pack(anchor="w", padx=15, pady=(10, 0))
 
     fourth = ctk.CTkFrame(
         bottom_right,
-        width=240,
+        width=250,
         height=90,
-
-        corner_radius=10,
+        corner_radius=20,
         fg_color="#FFFFFF",
-
     )
+    fourth.pack_propagate(False)
+    fourth.pack(padx=15, pady=5)
 
-    fourth.pack(fill="y", pady=(10))
+    saved_text = ctk.CTkLabel(
+        fourth,
+        corner_radius=20,
+        text="You haven't saved anything yet!",
+        font=("Poppins", 13, "bold"),
+        text_color="black",
+    )
+    saved_text.place(relx=0.5, rely=0.5, anchor="center")
 
-    return main_frame, left_sidebar, right_sidebar, Third, fourth
+    return container

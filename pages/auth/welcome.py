@@ -16,20 +16,31 @@ class WelcomePage(ctk.CTkFrame):
         page, left, right, panel = create_auth_layout(self, panel_side="left")
         page.pack(fill="both", expand=True)
 
+        # large logo image
+        large_logo = ctk.CTkImage(
+            light_image=Image.open("assets/icons/logo1.png"),
+            dark_image=Image.open("assets/icons/logo1.png"),
+            size=(300, 300)
+        )
+
+        small_logo = ctk.CTkImage(
+            light_image=Image.open("assets/icons/logo2.png"),
+            dark_image=Image.open("assets/icons/logo2.png"),
+            size=(70, 70)
+        )
+
         # large logo placeholder
         ctk.CTkLabel(
             panel,
-            text="Logo",
-            font=("Konkhmer Sleokchher", 40, "bold"),
-            text_color="white"
-        ).place(relx=0.5, rely=0.40, anchor="center")
+            image=large_logo,
+            text=""
+        ).place(relx=0.5, rely=0.50, anchor="center")
 
         # small logo placeholder
         ctk.CTkLabel(
             right,
-            text="LOGO",
-            font=("Konkhmer Sleokchher", 20, "bold"),
-            text_color="white"
+            image=small_logo,
+            text=""
         ).place(relx=0.5, rely=0.15, anchor="center")
 
         ctk.CTkLabel(
@@ -43,7 +54,7 @@ class WelcomePage(ctk.CTkFrame):
         ctk.CTkLabel(
             right,
             text="Preserving Yesterday...",
-            font=("Konkhmer Sleokchher", 25, "bold")
+            font=("Konkhmer Sleokchher", 20, "bold")
         ).place(relx=0.5, rely=0.5, anchor="center")
 
         # get started button
@@ -52,9 +63,9 @@ class WelcomePage(ctk.CTkFrame):
             text="Get Started",
             fg_color=PRIMARY_BLUE,
             text_color=TEXT_WHITE,
-            corner_radius=15,
-            width=180,
-            height=50,
-            font=("Khonkhmer Sleokchher", 18, "bold"),
+            corner_radius=30,
+            width=250,
+            height=57,
+            font=("Khonkhmer Sleokchher", 22, "bold"),
             command=lambda: self.controller.show_page(LoginPage)
         ).place(relx=0.50, rely=0.68, anchor="center")
